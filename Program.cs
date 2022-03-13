@@ -52,12 +52,12 @@ namespace SQ7
 
         /*public void Rollback(int statusIndex)
         {
-            var rollbackHictory = new ActionHistory<IAction<T>>();
+            var rollbackHistory = new ActionHistory<IAction<T>>();
             for (int i = actionHistory.Count - 1; i > statusIndex; i--)
             {
                 var command = actionHistory.Pop();
                 command.Undo(ListItem);
-                rollbackHictory.Push(command);
+                rollbackHistory.Push(command);
             }
 
         }*/
@@ -73,13 +73,13 @@ namespace SQ7
     {
         public readonly int StatusIndex;
         public readonly LinkedList<T> ActionHistory;
-        private readonly ActionHistory<IAction<T>> historyRollback;
+        private readonly ActionHistory<IAction<T>> rollbackHistory;
 
         public Rollbacking(int statusIndex, LinkedList<T> actionHistory, List<T> listItem)
         {
             this.StatusIndex = statusIndex;
             this.ActionHistory = actionHistory;
-            historyRollback = new ActionHistory<IAction<T>>();
+            rollbackHistory = new ActionHistory<IAction<T>>();
         }
 
         public void Execute(List<T> items)
