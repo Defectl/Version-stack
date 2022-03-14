@@ -11,20 +11,38 @@ namespace SQ7
 {
     public class ActionHistory<T>
     {
-        private readonly LinkedList<T> actionHistory = new LinkedList<T>();
+        private Example<T> last;
+        private readonly List<Example<T>> actionHistory = new List<Example<T>>();
 
-        public void Push(T item) => actionHistory.AddLast(item);
+        public void Push(T value)
+        {
+            last = new Example<T>(value, last);
+            actionHistory.Add(last);
+        }
 
         public T Pop()
         {
-            var currentItem = actionHistory.Last.Value;
-            actionHistory.RemoveLast();
-            return currentItem;
+            var value = last.Value;
+            last = last.Previous;
+            actionHistory.RemoveAt(Count);
+            return value;
         }
 
-        public int Count => actionHistory.Count;
+        public void Clear() => last = null;
 
-        public void Clear() => actionHistory.Clear();
+        public int Count => actionHistory.Count;
+    }
+
+    public class Example<T>
+    {
+        public T Value;
+        public Example<T> Previous;
+
+        public Example(T value, Example<T> previous)
+        {
+            Value = value;
+            Previous = previous;
+        }
     }
 
     public class Stack<T>
@@ -50,17 +68,11 @@ namespace SQ7
 
         public void Forget() => actionHistory.Clear();
 
-        /*public void Rollback(int statusIndex)
+        public void Rollback(int statusIndex)
         {
-            var rollbackHistory = new ActionHistory<IAction<T>>();
-            for (int i = actionHistory.Count - 1; i > statusIndex; i--)
-            {
-                var command = actionHistory.Pop();
-                command.Undo(ListItem);
-                rollbackHistory.Push(command);
-            }
+      
 
-        }*/
+        }
     }
 
     interface IAction<T>
@@ -68,30 +80,6 @@ namespace SQ7
         void Execute(List<T> items);
         void Undo(List<T> items);
     }
-
-    /*public class Rollbacking<T> : IAction<T>
-    {
-        public readonly int StatusIndex;
-        public readonly LinkedList<T> ActionHistory;
-        private readonly ActionHistory<IAction<T>> rollbackHistory;
-
-        public Rollbacking(int statusIndex, LinkedList<T> actionHistory, List<T> listItem)
-        {
-            this.StatusIndex = statusIndex;
-            this.ActionHistory = actionHistory;
-            rollbackHistory = new ActionHistory<IAction<T>>();
-        }
-
-        public void Execute(List<T> items)
-        {
-
-        }
-
-        public void Undo(List<T> items)
-        {
-            throw new NotImplementedException();
-        }
-    }*/
 
     public class Adding<T> : IAction<T>
     {
