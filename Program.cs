@@ -28,6 +28,13 @@ namespace SQ7
             return value;
         }
 
+        /*public void Rollback(int statusIndex)
+        {
+            last = actionHistory[statusIndex];
+            actionHistory.Clear();
+            actionHistory.Add(last);
+        }*/
+
         public void Clear() => last = null;
 
         public int Count => actionHistory.Count;
