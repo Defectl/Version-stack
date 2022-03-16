@@ -43,9 +43,12 @@ namespace SQ7
 
         public void Pop()
         {
-                var command = new Removing<T>();
-                actionHistory.Push(command);
-                command.Execute(ListItem);
+            if(ListItem.Count == 0)
+                throw new ArgumentOutOfRangeException();
+
+            var command = new Removing<T>();
+            actionHistory.Push(command);
+            command.Execute(ListItem);
         }
 
         public void Forget() => actionHistory.Clear();
