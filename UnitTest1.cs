@@ -7,7 +7,6 @@ namespace SQ7
     [TestFixture]
     public class Tests
     {
-
         [Test]
         public void PushItems()
         {
